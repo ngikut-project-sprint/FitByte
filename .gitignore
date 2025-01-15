@@ -1,12 +1,15 @@
 # compiled
 bin/
 
-# env file
+# Environment variables
 .env
 
-# IDE and code editor
-.vscode
-.idea
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
 
-# OS generated files
+# OS specific files
 .DS_Store
+Thumbs.db
