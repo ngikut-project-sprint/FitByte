@@ -1,1 +1,1 @@
-# FitByte
+# 🏃‍♂️ FitByte
