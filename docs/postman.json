@@ -1,0 +1,336 @@
+{
+  "info": {
+    "_postman_id": "f1b3c8d2-e4a5-6f7g-8h9i-0j1k2l3m4n5o",
+    "name": "FitByte API",
+    "description": "API collection for FitByte fitness tracking application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for user registration and login",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData && jsonData.token) {",
+                  "    pm.environment.set('authToken', jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "register"]
+            },
+            "description": "Register a new user and get authentication token"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData && jsonData.token) {",
+                  "    pm.environment.set('authToken', jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "login"]
+            },
+            "description": "Login existing user and get authentication token"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Activities",
+      "description": "Endpoints for managing fitness activities",
+      "item": [
+        {
+          "name": "Create Activity",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activityType\": \"RUNNING\",\n  \"doneAt\": \"2024-01-16T10:00:00Z\",\n  \"durationInMinutes\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/activity",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "activity"]
+            }
+          }
+        },
+        {
+          "name": "Get Activities",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/v1/activity?limit=5&offset=0&activityType=RUNNING&doneAtFrom=2024-01-01T00:00:00Z&doneAtTo=2024-01-31T23:59:59Z",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "activity"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5",
+                  "description": "Number of records per page"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of records to skip"
+                },
+                {
+                  "key": "activityType",
+                  "value": "RUNNING",
+                  "description": "Filter by activity type"
+                },
+                {
+                  "key": "doneAtFrom",
+                  "value": "2024-01-01T00:00:00Z",
+                  "description": "Filter by start date"
+                },
+                {
+                  "key": "doneAtTo",
+                  "value": "2024-01-31T23:59:59Z",
+                  "description": "Filter by end date"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Activity",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activityType\": \"RUNNING\",\n  \"durationInMinutes\": 45\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/activity/:activityId",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "activity", ":activityId"],
+              "variable": [
+                {
+                  "key": "activityId",
+                  "value": "",
+                  "description": "ID of the activity to update"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Activity",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/v1/activity/:activityId",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "activity", ":activityId"],
+              "variable": [
+                {
+                  "key": "activityId",
+                  "value": "",
+                  "description": "ID of the activity to delete"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "File Upload",
+      "description": "Endpoint for uploading files",
+      "item": [
+        {
+          "name": "Upload File",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "JPEG/JPG file, max 100KB"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/file",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "file"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "description": "Endpoints for managing user profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/v1/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "user"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"preference\": \"CARDIO\",\n  \"weightUnit\": \"KG\",\n  \"heightUnit\": \"CM\",\n  \"weight\": 70,\n  \"height\": 175,\n  \"name\": \"John Doe\",\n  \"imageUri\": \"https://example.com/profile.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "user"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
