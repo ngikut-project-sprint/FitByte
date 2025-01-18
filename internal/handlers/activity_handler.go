@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"fitbyte/internal/models"
 	"fitbyte/internal/services"
+	"fitbyte/internal/database"
 )
 
 // ActivityHandler handles /v1/activity endpoints
@@ -44,6 +45,29 @@ func ActivityHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, activities)
 }
+
+// DeleteActivityHandler handles the deletion of an activity.
+func DeleteActivityHandler(c echo.Context) error {
+    activityID := c.Param("activityId")
+    if activityID == "" {
+        return c.JSON(http.StatusNotFound, map[string]string{"error": "activity ID not found"})
+    }
+
+    db := database.GetDB()
+    query := `UPDATE activities SET deleted_at = NOW() WHERE id = $1 AND deleted_at IS NULL`
+    result, err := db.Exec(query, activityID)
+    if err != nil {
+        return c.JSON(http.StatusInternalServerError, map[string]string{"error": "internal server error"})
+    }
+
+    rowsAffected, err := result.RowsAffected()
+    if err != nil || rowsAffected == 0 {
+        return c.JSON(http.StatusNotFound, map[string]string{"error": "activity ID not found"})
+    }
+
+    return c.JSON(http.StatusOK, map[string]string{"message": "deleted"})
+}
+
 
 func parsePagination(limitStr, offsetStr string) (int, int) {
 	limit := 5 // Default
