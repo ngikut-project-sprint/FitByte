@@ -2,16 +2,8 @@ CREATE TYPE PREFERENCE_TYPE AS ENUM ('CARDIO', 'WEIGHT');
 CREATE TYPE WEIGHT_UNIT AS ENUM ('KG', 'LBS');
 CREATE TYPE HEIGHT_UNIT AS ENUM ('CM', 'INCH');
 CREATE TYPE ACTIVITY_TYPE AS ENUM (
-    'WALKING',
-    'YOGA',
-    'STRECHING',
-    'CYCLING',
-    'SWIMMING',
-    'DANCING',
-    'HIKING',
-    'RUNNING',
-    'HIIT',
-    'JUMP_ROPE'
+    'WALKING', 'YOGA', 'STRECHING', 'CYCLING', 'SWIMMING',
+    'DANCING', 'HIKING', 'RUNNING', 'HIIT', 'JUMP_ROPE'
 );
 
 CREATE TABLE users (
@@ -38,13 +30,13 @@ CREATE TABLE activities (
     user_id INTEGER NOT NULL,
     activity_type ACTIVITY_TYPE NOT NULL,
     done_at TIMESTAMP NOT NULL,
-    duration_minutes INTEGER NOT NULL,
+    duration_in_minutes INTEGER NOT NULL,
     calories_burned DECIMAL(10,2) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id),
-    CONSTRAINT duration_positive CHECK (duration_minutes > 0)
+    CONSTRAINT duration_positive CHECK (duration_in_minutes > 0)
 );
 
 CREATE TABLE files (
