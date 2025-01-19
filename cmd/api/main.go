@@ -9,6 +9,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"fitbyte/internal/handlers"
 )
 
 func main() {
@@ -36,7 +37,10 @@ func main() {
 	// TODO: Add usecase initialization
 
 	// Initialize handlers
-	// TODO: Add handler initialization
+	api := e.Group("/v1")
+	// api.Use(AuthorizationMiddleware)	// Wait Auth Middleware done.
+	api.GET("/activity", handlers.ActivityHandler)
+	api.DELETE("/activity/:activityId", handlers.DeleteActivityHandler)
 
 	// Register routes
 	// TODO: Add route registration
